@@ -61,6 +61,18 @@ public class DriverScript {
 						{
 							functionLibrary.closeBrowser();
 						}
+						if(ObjectType.equalsIgnoreCase("dropDownAction"))
+						{
+							functionLibrary.dropDownAction(Ltype, Lvalue, TestData);
+						}
+						if(ObjectType.equalsIgnoreCase("captureStock"))
+						{
+							functionLibrary.captureStock(Ltype, Lvalue);
+						}
+						if(ObjectType.equalsIgnoreCase("stockTable"))
+						{
+							functionLibrary.stockTable();
+						}
 						//write as pass into status cell in TCmodule sheet
 						xl.setCellData(TCModule, j, 5, "Pass", outputpath);
 						Module_Status = "True";
