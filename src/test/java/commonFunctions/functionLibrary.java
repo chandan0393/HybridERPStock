@@ -30,7 +30,7 @@ public class functionLibrary {
 			driver = new ChromeDriver();
 			driver.manage().window().maximize();
 		}
-		else if(conpro.getProperty("Browser").equalsIgnoreCase("firefox")
+		else if(conpro.getProperty("Browser").equalsIgnoreCase("firefox"))
 				{
 			driver = new FirefoxDriver();
 			driver.manage().window().maximize();
@@ -50,7 +50,7 @@ public class functionLibrary {
 	//method for wait to any element
 	public static void waitForElement(String LocatorType, String LocatorValue, String TestData)
 	{
-		WebDriverWait mywait = new WebDriverWait(driver,Duration.ofSeconds(Integer.parseInt(TestData));
+		WebDriverWait mywait = new WebDriverWait(driver,Duration.ofSeconds(Integer.parseInt(TestData)));
 		if(LocatorType.equalsIgnoreCase("xpath"))
 		{
 			//wait until element is visible
