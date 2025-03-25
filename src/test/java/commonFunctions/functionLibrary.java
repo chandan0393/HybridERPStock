@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Properties;
 
+import org.bson.io.ByteBufferBsonInput;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -36,17 +37,17 @@ public class functionLibrary {
 			driver.manage().window().maximize();
 		}
 		else if(conpro.getProperty("Browser").equalsIgnoreCase("firefox"))
-				{
+		{
 			driver = new FirefoxDriver();
 			driver.manage().window().maximize();
-				}
+		}
 		else
 		{
 			Reporter.log("Browser value is not matching",true);
 		}
 		return driver;
 	}
-	
+
 	//method for launching url
 	public static void OpenUrl()
 	{
@@ -71,7 +72,7 @@ public class functionLibrary {
 			//wait until element is visible
 			mywait.until(ExpectedConditions.visibilityOfElementLocated(By.id(LocatorValue)));
 		}
-		
+
 	}
 	//method for any text box
 	public static void typeAction(String LocatorType, String LocatorValue,String TestData)
@@ -113,7 +114,7 @@ public class functionLibrary {
 	{
 		String Actual_title = driver.getTitle();
 		try {
-		Assert.assertEquals(Actual_title, Expected_title, "Title is not matching");
+			Assert.assertEquals(Actual_title, Expected_title, "Title is not matching");
 		}
 		catch(AssertionError a)
 		{
@@ -151,7 +152,7 @@ public class functionLibrary {
 			element.selectByIndex(value);
 		}
 	}
-	
+
 	//method for capture stock number into notepad
 	public static void captureStock(String LocatorType, String LocatorValue ) throws Throwable 
 	{
@@ -185,7 +186,7 @@ public class functionLibrary {
 		//click search panel if search textbox not displayed
 		if(!driver.findElement(By.xpath(conpro.getProperty("search-textbox"))).isDisplayed())
 			//click search panel
-				driver.findElement(By.xpath(conpro.getProperty("search-panel"))).click();
+			driver.findElement(By.xpath(conpro.getProperty("search-panel"))).click();
 		driver.findElement(By.xpath(conpro.getProperty("search-textbox"))).clear();
 		driver.findElement(By.xpath(conpro.getProperty("search-textbox"))).sendKeys(Exp_Data);
 		driver.findElement(By.xpath(conpro.getProperty("search-button"))).click();
@@ -198,10 +199,101 @@ public class functionLibrary {
 		} catch (AssertionError a) {
 			System.out.println(a.getMessage());
 		}
-		
+
 	}
-	
-	
-	
-	
+	//method to capture supplier
+	public static void capturesup(String LocatorType, String LocatorValue) throws Throwable
+	{
+		String supplierNum = "";
+		if(LocatorType.equalsIgnoreCase("xpath"))
+		{ 
+
+			supplierNum = driver.findElement(By.xpath(LocatorValue)).getAttribute("value");
+		}
+		if(LocatorType.equalsIgnoreCase("name"))
+		{ 
+
+			supplierNum = driver.findElement(By.name(LocatorValue)).getAttribute("value");
+		}
+		if(LocatorType.equalsIgnoreCase("id"))
+		{ 
+
+			supplierNum = driver.findElement(By.id(LocatorValue)).getAttribute("value");
+		}
+		FileWriter fw = new FileWriter("./CaptureData/suppliernumber.txt");
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write(supplierNum);
+		bw.flush();
+		bw.close();
+	}
+	// method for reading supplier number and verify in supplier table
+	public static void suppliertable() throws Throwable
+	{
+		FileReader fr = new FileReader("./CaptureData/suppliernumber.txt");
+		BufferedReader br = new BufferedReader(fr);
+		String Exp_Data = br.readLine();
+		if(!driver.findElement(By.xpath(conpro.getProperty("search-textbox"))).isDisplayed()){
+			driver.findElement(By.xpath(conpro.getProperty("search-panel"))).click();
+			driver.findElement(By.xpath(conpro.getProperty("search-textbox"))).clear();
+			driver.findElement(By.xpath(conpro.getProperty("search-textbox"))).sendKeys(Exp_Data);
+			driver.findElement(By.xpath(conpro.getProperty("search-button"))).click();
+			Thread.sleep(2000);
+			String Act_Data = driver.findElement(By.xpath("//table[@class = 'table ewTable']/tbody/tr[1]/td[6]/div/span/span")).getText();
+			Reporter.log(Exp_Data+"   "+Act_Data,true);
+			try {
+				Assert.assertEquals(Act_Data, Exp_Data,"Supplier number not found in table" );
+			} catch (AssertionError a) {
+				System.out.println(a.getMessage());
+			}
+		}
+	}
+	//method for capturing customer number
+	public static void capturecus(String LocatorType, String LocatorValue ) throws Throwable
+	{
+		String customernum = "";
+		if(LocatorType.equalsIgnoreCase("xpath"))
+		{
+			customernum = driver.findElement(By.xpath(LocatorValue)).getAttribute("value");
+		}
+		if(LocatorType.equalsIgnoreCase("name"))
+		{
+			customernum = driver.findElement(By.name(LocatorValue)).getAttribute("value");
+		}
+		if(LocatorType.equalsIgnoreCase("id"))
+		{
+			customernum = driver.findElement(By.id(LocatorValue)).getAttribute("value");
+		}
+		FileWriter fw = new FileWriter("./CaptureData/customernumber");
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write(customernum);
+		bw.flush();
+		bw.close();
+	}
+	//method for customertable
+	public static void customertable() throws Throwable
+	{
+		FileReader fr = new FileReader("./CaptureData/customernumber");
+		BufferedReader br = new BufferedReader(fr);
+		String Exp_Data = br.readLine();
+		if(!driver.findElement(By.xpath(conpro.getProperty(""))).isDisplayed())
+		{
+			driver.findElement(By.xpath(conpro.getProperty("search-panel"))).click();
+			driver.findElement(By.xpath(conpro.getProperty("search-textbox"))).clear();
+			driver.findElement(By.xpath(conpro.getProperty("search-textbox"))).sendKeys(Exp_Data);
+			driver.findElement(By.xpath(conpro.getProperty("search-button"))).click();
+			Thread.sleep(2000);
+			String Act_Data = driver.findElement(By.xpath("//table[@class = 'table ewTable']/tbody/tr[1]/td[5]/div/span/span")).getText();
+			Reporter.log(Exp_Data+"  "+Act_Data,true);
+			Thread.sleep(2000);
+			try {
+				Assert.assertEquals(Act_Data, Exp_Data,"customer data not found in customer table");
+			} catch (AssertionError e) {
+				System.out.println(e.getMessage());
+			}	
+		}
+	}
+
+
+
+
 }

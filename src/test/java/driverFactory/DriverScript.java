@@ -14,7 +14,7 @@ public class DriverScript {
 	{
 		String Module_Status ="";
 		String Module_New ="";
-		
+
 		//create reference object for accessing methods
 		ExcelFileUtil xl = new ExcelFileUtil(inputpath);
 		for(int i=1;i<=xl.rowCount(TCSheet);i++)
@@ -73,6 +73,24 @@ public class DriverScript {
 						{
 							functionLibrary.stockTable();
 						}
+						if(ObjectType.equalsIgnoreCase("capturesup"))
+						{
+							functionLibrary.capturesup(Ltype, Lvalue);
+						}
+						if(ObjectType.equalsIgnoreCase("suppliertable"))
+						{
+							functionLibrary.suppliertable();
+						}
+						if(ObjectType.equalsIgnoreCase("capturecus"))
+						{
+							functionLibrary.capturecus(Ltype, Lvalue);
+						}
+						if(ObjectType.equalsIgnoreCase("customertable"))
+						{
+							functionLibrary.customertable();
+						}
+
+
 						//write as pass into status cell in TCmodule sheet
 						xl.setCellData(TCModule, j, 5, "Pass", outputpath);
 						Module_Status = "True";
@@ -91,9 +109,9 @@ public class DriverScript {
 						//write as fail into TCSheet in status cell
 						xl.setCellData(TCSheet, i, 3, "Fail", outputpath);
 					}
-					
+
 				}
-				
+
 			}
 			else
 			{
@@ -101,8 +119,8 @@ public class DriverScript {
 				xl.setCellData(TCSheet, i, 3, "Blocked", outputpath);
 			}
 		}
-		
-		
+
+
 	}
-	
+
 }
